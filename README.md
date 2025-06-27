@@ -1,4 +1,6 @@
 
+THIS PROJECT IS CURRENTLY UNDER CONSTRUCTION AND IS IN THE PROCESS OF BEING UPLOADED. THE CURRENT FOLDER ONLY CONTAINS THE FULL CODE.
+
 This project utilizes a deep learning model (convolution neural network (CNN))) to predict the interaction between an RNA molecule and peptide molecule. More specifically, whether the two molecules would bind or not.
 
 ## Data
