@@ -1,7 +1,5 @@
 
-THIS PROJECT IS CURRENTLY UNDER CONSTRUCTION AND IS IN THE PROCESS OF BEING UPLOADED. THE CURRENT FOLDER ONLY CONTAINS THE FULL CODE.
-
-This project utilizes a deep learning model (convolution neural network (CNN))) to predict the interaction between an RNA molecule and peptide molecule. More specifically, whether the two molecules would bind or not.
+This project utilizes a deep learning model to predict the interaction between RNA and peptide molecules. The model for this project is based on a dual-branch 1D CNN (with 3 convolution layers) trained on curated RNA–peptide pairs.
 
 ## Data
 This project accepts .pdb files and .fasta files
@@ -21,3 +19,20 @@ RNA-Peptide-Binding-CNN/
 │   └── train.py
 ├── config.py
 └── main.py
+
+##  Model Overview
+
+- Two parallel 1D CNN branches for RNA and peptide one-hot sequences
+- Adaptive pooling and concatenation
+- Fully connected layers with sigmoid output for binary classification
+
+##  Dataset Construction
+
+- Positive pairs are parsed from RPI2241.
+- Negative pairs are generated from unrelated chains in `.pdb` or randomized `.fasta` sequences.
+- Dataset logic implemented in `src/dataset.py`, `data_processing.py`.
+
+---
+
+
+
