@@ -189,14 +189,14 @@ def get_cached_structure_sequences(pdb_dir, cache_path):
     try:
       structure = parser.get_structure(pdb_id, file_path)
       model = next(structure.get_models())
-      chains = {'protein': [], 'rna': []}
+      chains = {}
 
       for chain in model:
         chain_type = get_chain_type(chain)
         if not chain_type:
           continue
         seq = get_chain_sequence(chain)
-        chains[chain_type].append(seq)  # Store sequence directly
+        chains[chain.id] = {'type': chain_type, 'sequence': seq}
 
       structure_sequences[pdb_id] = chains
 
@@ -222,14 +222,16 @@ def generate_valid_negatives(positive_pairs, structure_chains, num_negatives):
     pdb_id = random.choice(all_pdbs)
     chains = rpi_structure_chains[pdb_id]
 
-    protein_chains = chains.get('protein', [])
-    rna_chains = chains.get('rna', [])
+    protein_chains = [cid for cid, info in chains.items() if info['type'] == 'protein']
+    rna_chains = [cid for cid, info in chains.items() if info['type'] == 'rna']
 
     if not protein_chains or not rna_chains:
       continue
 
-    prot_chain = random.choice(protein_chains)
-    rna_chain = random.choice(rna_chains)
+    prot_chain_id = random.choice(protein_chains)
+    rna_chain_id = random.choice(rna_chains)
+    prot_chain =f"{pdb_id}_{prot_chain_id}"
+    rna_chain = f"{pdb_id}_{rna_chain_id}"
 
     if (prot_chain, rna_chain) in positive_set:
       continue
@@ -243,7 +245,9 @@ fasta_negative_pairs = []
 for _ in range(len(rpi2241_positive_pairs)):
     rna_seq = random.choice(rna_seqs)
     pep_seq = random.choice(peptide_seqs)
-    fasta_negative_pairs.append((rna_seq, pep_seq, 0.0))
+    rna_idx = random.randint(0, len(rna_seqs)-1)
+    pep_idx = random.randint(0, len(peptide_seqs)-1)
+    fasta_negative_pairs.append((rna_idx, pep_idx))
 
 positive_labeled = [(p, r, 1.0) for p, r in rpi2241_positive_pairs]
 negative_labeled = rpi2241_negative_pairs
