@@ -12,9 +12,10 @@ class RNAPeptideDataset(Dataset):
     self.fasta_pep_seqs = fasta_pep_seqs if fasta_pep_seqs is not None else []
 
     for item in labeled_pairs:
-      if len(item) == 3: # PDB pair
-        prot_chain, rna_chain, label = item
-        self._process_pdb_pair(prot_chain, rna_chain, label)  # Fixed method name
+      if len(item) == 3:
+        if all(isinstance(x, str) for x in item[:2]):
+          prot_chain, rna_chain, label = item
+          self._process_pdb_pair(prot_chain, rna_chain, label)  # Fixed method name
       elif len(item) == 2:
         rna_idx, pep_idx = item
         self._process_fasta_pair(rna_idx, pep_idx)
@@ -107,8 +108,8 @@ def collate_fn(batch):
 
 full_dataset = RNAPeptideDataset(labeled_pairs=all_labeled_pairs, structure_sequences=rpi_structure_chains, pdb_dir="/content/drive/MyDrive/Deep Learning/pdb_files", fasta_rna_seqs=rna_seqs, fasta_pep_seqs=peptide_seqs)
 
-pdb_pairs = [pair for pair in all_labeled_pairs if len(pair[0].split("_")) == 2]
-fasta_pairs = [pair for pair in all_labeled_pairs if len(pair[0].split("_")) != 2]
+pdb_pairs = [pair for pair in all_labeled_pairs if isinstance(pair[0], str) and len(pair[0].split("_")) == 2]
+fasta_pairs = [pair for pair in all_labeled_pairs if isinstance(pair[0], int) and isinstance(pair[1], int)]]
 
 pdb_to_indices = defaultdict(list)
 for idx, (prot_chain, rna_chain, label) in enumerate(pdb_pairs):
