@@ -2,7 +2,7 @@
 This project utilizes a deep learning model to predict the interaction between RNA and peptide molecules. The model for this project is based on a dual-branch 1D CNN (with 3 convolution layers) trained on curated RNA–peptide pairs.
 
 ## Data
-This project accepts .pdb files and .fasta files
+This project accepts .pdb files and .fasta files which can be downloaded from Peptipedia, PDB, bpRNA and RPISeq
 
 ##  Project Structure
 
